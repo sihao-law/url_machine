@@ -194,7 +194,7 @@ class Dashboard extends Component {
 
                 <div className='flex_container'>
                     <div className=' dash_caption'>Interval in second</div>
-                    <Select defaultValue="5" style={{ width: 120 }} onChange={this.onIntervalSelectChange}>
+                    <Select defaultValue="8" style={{ width: 120 }} onChange={this.onIntervalSelectChange}>
                         {constants.IntervalSecond.map((sec, index) => {
                             return <Option value={sec}>{sec}</Option>
                         })}
