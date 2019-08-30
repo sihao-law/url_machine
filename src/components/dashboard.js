@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import { Button, Input, Select } from 'antd';
 import constants from './../constants/constants';
 import { DashboardStyle } from './dashboardStyle';
@@ -16,13 +16,10 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            interval: 8,
+            interval: 10,
             id: 'Q132627027',
-            urlList: `https://m.qoo10.sg/livetweet/37778/Q
-            https://m.qoo10.sg/livetweet/37875/Q
-            https://m.qoo10.sg/livetweet/37920/Q
-            https://m.qoo10.sg/livetweet/38020/Q
-            https://m.qoo10.sg/livetweet/38020/Q`,
+            urlList: `https://m.qoo10.sg/livetweet/37778/Q\nhttps://m.qoo10.sg/livetweet/37875/Q\nhttps://m.qoo10.sg/livetweet/37920/Q\nhttps://m.qoo10.sg/livetweet/38020/Q\nhttps://m.qoo10.sg/livetweet/38020/Q`,// list in string
+            aurlList: [],
             message: '0/0 completed',
 
             mine: {
@@ -92,54 +89,26 @@ class Dashboard extends Component {
         //open 1 by 1 of urlList to new tab and close it after {this.state.interval} seconds
         newUrlList.forEach(function (url, index) {
             console.log(`${index} ${url}`);
-            //var tabWindow = window.open(url, `Tab ${index}`, "height=400,width=400,modal=yes,alwaysRaised=yes");
-            //var tabWindow = window.open(url, '_self');
             var tabWindow = popupwindow(url, `Tab ${index}`, 400, 400);
 
-
-            //var tabWindowMine = window.open(url, `Tab ${index}`, "height=400,width=400,modal=yes,alwaysRaised=yes");
-
             setTimeout(() => {
-                //console.log(arguement);
                 tabWindow.close();
-                //tabWindowMine.close();
-
-                // this.setState({
-                //     message: `${index}/${newUrlList.length} completed...`
-                // })
             }, interval * 1000);
-            //setTimeout(this.closeWindowcb(index, tabWindow, newUrlList.length), interval * 1000);
         })
 
         newUrlListMine.forEach(function (url, index) {
             console.log(`${index} ${url}`);
-            //var tabWindow = window.open(url, `Tab ${index}`, "height=400,width=400,modal=yes,alwaysRaised=yes");
-            //var tabWindow = window.open(url, '_self');
             var tabWindow = popupwindow(url, `Tab ${index}`, 400, 400);
-
-
-            //var tabWindowMine = window.open(url, `Tab ${index}`, "height=400,width=400,modal=yes,alwaysRaised=yes");
-
             setTimeout(() => {
-                //console.log(arguement);
                 tabWindow.close();
-                //tabWindowMine.close();
-
-                // this.setState({
-                //     message: `${index}/${newUrlList.length} completed...`
-                // })
             }, interval * 1000);
-            //setTimeout(this.closeWindowcb(index, tabWindow, newUrlList.length), interval * 1000);
         })
 
 
     }
 
     closeWindowcb = (index, tabWindow, aListSize) => {
-        //console.log(arguement);
         tabWindow.close();
-        //tabWindowMine.close();
-
         this.setState({
             message: `${index}/${aListSize} completed...`
         });
@@ -148,7 +117,8 @@ class Dashboard extends Component {
 
     onClearUrlList = () => {
         this.setState({
-            urlList: ''
+            urlList: '',
+            aUrlList: []
         })
     }
 
@@ -161,14 +131,17 @@ class Dashboard extends Component {
     }
 
     onInputChange = ({ target: { value } }) => {
-        console.log(`onInputChange ${value}`);
+        //console.log(`onInputChange ${value}`);
+        const aUrlList = value.split('/');
+
         this.setState({
-            urlList: value
+            urlList: value,
+            aUrlList: aUrlList
         });
     }
 
     onIdChange = ({ target: { value } }) => {
-        console.log(`onIdChange ${value}`);
+        // console.log(`onIdChange ${value}`);
         this.setState({
             id: value
         });
@@ -194,9 +167,9 @@ class Dashboard extends Component {
 
                 <div className='flex_container'>
                     <div className=' dash_caption'>Interval in second</div>
-                    <Select defaultValue="8" style={{ width: 120 }} onChange={this.onIntervalSelectChange}>
+                    <Select defaultValue="10" style={{ width: 120 }} onChange={this.onIntervalSelectChange}>
                         {constants.IntervalSecond.map((sec, index) => {
-                            return <Option value={sec}>{sec}</Option>
+                            return <Option key={index} value={sec}>{sec}</Option>
                         })}
                     </Select>
                 </div>
@@ -208,7 +181,7 @@ class Dashboard extends Component {
                 <div className='flex_container'>
                     {message}
                 </div>
-                <div>
+                <div className='flex_container'>
                     <TextArea rows={10} placeholder="Paste your url here" value={urlList} onChange={this.onInputChange} />
                 </div>
                 <div className='button_container'>
