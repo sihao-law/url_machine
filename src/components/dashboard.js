@@ -10,7 +10,8 @@ const { TextArea } = Input;
 class Dashboard extends Component {
 
 
-
+    urlListDelimiter = '\n';
+    urlDelimiter = '/';
 
     constructor(props) {
         super(props);
@@ -35,8 +36,6 @@ class Dashboard extends Component {
     onProcessUrlList = () => {
 
         const interval = this.state.interval;
-
-        var deliminator = '/';
         var newUrlList = [];
 
         //get list of url
@@ -49,12 +48,12 @@ class Dashboard extends Component {
             var trimUrl = url.trim();
 
             //check and splice url with id
-            var aUrl = trimUrl.split(deliminator)
+            var aUrl = trimUrl.split(this.urlDelimiter)
 
             //replace last array
             aUrl[aUrl.length - 1] = this.state.id;
 
-            newUrl = aUrl.join(deliminator);
+            newUrl = aUrl.join(this.urlDelimiter);
 
             return newUrl;
         });
@@ -65,12 +64,12 @@ class Dashboard extends Component {
             var trimUrl = url.trim();
 
             //check and splice url with id
-            var aUrl = trimUrl.split(deliminator)
+            var aUrl = trimUrl.split(this.urlDelimiter)
 
             //replace last array
             aUrl[aUrl.length - 1] = this.state.mine.id;
 
-            newUrl = aUrl.join(deliminator);
+            newUrl = aUrl.join(this.urlDelimiter);
 
             return newUrl;
         });
@@ -88,6 +87,10 @@ class Dashboard extends Component {
 
         //open 1 by 1 of urlList to new tab and close it after {this.state.interval} seconds
         newUrlList.forEach(function (url, index) {
+
+            if (url === null || url === '') {
+                return;
+            }
             console.log(`${index} ${url}`);
             var tabWindow = popupwindow(url, `Tab ${index}`, 400, 400);
 
@@ -97,6 +100,9 @@ class Dashboard extends Component {
         })
 
         newUrlListMine.forEach(function (url, index) {
+            if (url === null || url === '') {
+                return;
+            }
             console.log(`${index} ${url}`);
             var tabWindow = popupwindow(url, `Tab ${index}`, 400, 400);
             setTimeout(() => {
@@ -132,11 +138,15 @@ class Dashboard extends Component {
 
     onInputChange = ({ target: { value } }) => {
         //console.log(`onInputChange ${value}`);
-        const aUrlList = value.split('/');
+        const aUrlList = value.split(this.urlListDelimiter);
+        var message = null;
+
+        message = `${0}/${aUrlList.length} ${constants.completed}`;
 
         this.setState({
             urlList: value,
-            aUrlList: aUrlList
+            aUrlList: aUrlList,
+            message: message
         });
     }
 

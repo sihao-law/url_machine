@@ -12,6 +12,10 @@ module.exports = Object.freeze({
         30,
         40,
         50
-    ]
+    ],
+    completed: "completed",
+    completing: "completing",
+    processMessage: "{0}/{1} {2}...",
+    pendingMessage: "{0}/{1} {2}",
 
 });
